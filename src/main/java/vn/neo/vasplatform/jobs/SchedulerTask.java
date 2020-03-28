@@ -33,11 +33,17 @@ public class SchedulerTask {
 
     @Scheduled(cron = "10 * * ? * *")
     public void cleanMemory() {
+        logger.debug("********** RUNNING SCHEDULER CLEAN MEMORY ************");
         System.gc();
     }
 
     @Scheduled(cron = "10 * * ? * *")
     public void doWriteLogToDb() throws SQLException, IOException {
+
+        logger.debug("************RUNNING SCHEDULER WRITE LOG************");
+        long startTime = System.nanoTime();
+        logger.debug("DO TASK WRITE LOG TO DATABASE");
+
         String dirShareLogMnt = props.getString(Constants.DIR_SHARE_LOG_MNT);
         String logMtVpFileName = props.getString(Constants.LOG_MTVP_FILE_NAME);
         String dirLogAppend = props.getString(Constants.DIR_LOG_APPEND);
@@ -55,10 +61,6 @@ public class SchedulerTask {
         dirFileLogMtVpEnd.append("-");
         dirFileLogMtVpEnd.append(calendar.get(Calendar.DATE));
         dirFileLogMtVpEnd.append(".log");
-
-        logger.debug("************RUNNING SCHEDULER WRITE LOG************");
-        long startTime = System.nanoTime();
-        logger.debug("DO TASK WRITE LOG TO DATABASE");
 
         File resource = new File(dirShareLogMnt);
 
